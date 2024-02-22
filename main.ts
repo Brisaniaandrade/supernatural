@@ -1,5 +1,74 @@
 function Call_Enemies () {
     tiles.setCurrentTilemap(tilemap`level8`)
+    list = []
+    GhostImage = [img`
+        ........................
+        ........................
+        ........................
+        ........................
+        ..........ffff..........
+        ........ff1111ff........
+        .......fb111111bf.......
+        .......f11111111f.......
+        ......fd11111111df......
+        ......fd11111111df......
+        ......fddd1111dddf......
+        ......fbdbfddfbdbf......
+        ......fcdcf11fcdcf......
+        .......fb111111ffff.....
+        ......fffcdb1bc111cf....
+        ....fc111cbfbf1b1b1f....
+        ....f1b1b1ffffbfbfbf....
+        ....fbfbfffffff.........
+        .........fffff..........
+        ..........fff...........
+        ........................
+        ........................
+        ........................
+        ........................
+        `, img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `]
+    if (controller.A.isPressed()) {
+        sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
+        for (let index = 0; index < 10; index++) {
+            let Location: tiles.Location[] = []
+            Ghost = sprites.create(GhostImage._pickRandom(), SpriteKind.Enemy)
+            tiles.placeOnTile(Ghost, Location.removeAt(randint(0, list.length)))
+        }
+    }
 }
 function Level_One_Women_in_White () {
     tiles.loadMap(tiles.createMap(tilemap`level7`))
@@ -526,6 +595,9 @@ function Level_One_Women_in_White () {
             `)
     })
 }
+let Ghost: Sprite = null
+let GhostImage: Image[] = []
+let list: number[] = []
 tiles.loadMap(tiles.createMap(tilemap`level1`))
 let Sam = sprites.create(img`
     . . . . . . f f f f . . . . . . 
