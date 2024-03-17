@@ -867,6 +867,8 @@ function Back_Story () {
                     ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
                     ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
                     `)
+                story.printCharacterText("The yellow-eyed demon saw you, run!!")
+                Call_Enemies()
             }
         })
     } else {
@@ -875,8 +877,11 @@ function Back_Story () {
 }
 function Call_Enemies () {
     tiles.setCurrentTilemap(tilemap`level8`)
+    tiles.placeOnRandomTile(Dean, assets.tile`myTile3`)
+    tiles.placeOnRandomTile(Sam, assets.tile`myTile27`)
     list = []
-    GhostImage = [img`
+    GhostImage = [
+    img`
         ........................
         ........................
         ........................
@@ -901,51 +906,97 @@ function Call_Enemies () {
         ........................
         ........................
         ........................
-        `, img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `, img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `]
-    if (controller.A.isPressed()) {
-        sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
-        for (let index = 0; index < 10; index++) {
-            let Location: tiles.Location[] = []
-            Ghost = sprites.create(GhostImage._pickRandom(), SpriteKind.Enemy)
-            tiles.placeOnTile(Ghost, Location.removeAt(randint(0, list.length)))
+        `,
+    img`
+        ........................
+        ........................
+        ........................
+        ........................
+        ........................
+        ..........ffff..........
+        ........ff1111ff........
+        .......fb111111bf.......
+        .....fffc1111111f.......
+        ...fc111cd1111111f......
+        ...f1b1b1b1111dddf......
+        ...fbfbffcf11fcddf......
+        ......fcf111111bbf......
+        .......ccbdb1b1fcf......
+        .......fffbfbfdff.......
+        ........ffffffff........
+        ........fffffffffff.....
+        .........fffffc111cf....
+        .........fffff1b1b1f....
+        ..........ffffbfbfbf....
+        ...........ffff.........
+        ........................
+        ........................
+        ........................
+        `,
+    img`
+        ........................
+        ........................
+        ........................
+        ........................
+        ..........ffff..........
+        ........ff1111ff........
+        .......fb111111bf.......
+        .......f11111111f.......
+        ......fd111111111f......
+        ......fd11111111df......
+        ......fd11111111df......
+        ......fcdd1111ddcff.....
+        .......fbcf11fcbfbbf....
+        .......ffbdb1bdffff.....
+        ........fcbfbfdf........
+        ........ffffffff........
+        ......ffffffffff........
+        .....fcb1bcffff.........
+        ......ffbff.............
+        ........................
+        ........................
+        ........................
+        ........................
+        ........................
+        `,
+    img`
+        ........................
+        ........................
+        ........................
+        ........................
+        ........................
+        ..........ffff..........
+        ........ff1111ff........
+        .......fb111111bf.......
+        .......f11111111f.......
+        ......fd11111111df......
+        ....7.fd11111111df......
+        ...7..fd11111111df......
+        ...7..fd11111111df......
+        ...7..fddd1111dddff.....
+        ...77.fbdbfddfbdbfcf....
+        ...777fcdcf11fcdcfbf....
+        ....77fffbdb1bdffcf.....
+        ....fcb1bcffffff........
+        ....f1c1c1ffffff........
+        ....fdfdfdfffff.........
+        .....f.f.f..............
+        ........................
+        ........................
+        ........................
+        `
+    ]
+    if (Dean.tileKindAt(TileDirection.Right, sprites.dungeon.greenInnerNorthWest) || Sam.tileKindAt(TileDirection.Left, sprites.dungeon.greenInnerSouthEast)) {
+        let Location: tiles.Location[] = []
+        Ghost = sprites.create(GhostImage._pickRandom(), SpriteKind.Enemy)
+        tiles.placeOnTile(Ghost, Location.removeAt(randint(0, list.length)))
+        if (Math.percentChance(75)) {
+        	
         }
     }
 }
 function Level_One_Women_in_White () {
+    let Jess: Sprite = null
     tiles.loadMap(tiles.createMap(tilemap`level7`))
     game.splash("The Women in White is like the English version of \"La Llorona\"")
     story.startCutscene(function () {
@@ -1749,69 +1800,50 @@ let GhostImage: Image[] = []
 let list: number[] = []
 let Dean: Sprite = null
 let Sam: Sprite = null
-let Jess: Sprite = null
 story.printText("Remember that Sam is the youngest and Dean is the oldest, as the game goes and you go into levels there would be facts that you would need to remember as they woud be asked later on and would make you win or lose the game.", 78, 50, 15)
 tiles.loadMap(tiles.createMap(tilemap`level1`))
 mp.setPlayerSprite(mp.playerSelector(mp.PlayerNumber.One), sprites.create(img`
     . . . . . . f f f f . . . . . . 
     . . . . f f f 2 2 f f f . . . . 
-    . . . f f f 2 2 2 2 f f f . . . 
-    . . f f f e e e e e e f f f . . 
-    . . f f e 2 2 2 2 2 2 e e f . . 
-    . . f e 2 f f f f f f 2 e f . . 
-    . . f f f f e e e e f f f f . . 
-    . f f e f b f 4 4 f b f e f f . 
-    . f e e 4 1 f d d f 1 4 e e f . 
-    . . f e e d d d d d d e e f . . 
-    . . . f e e 4 4 4 4 e e f . . . 
-    . . e 4 f 2 2 2 2 2 2 f 4 e . . 
-    . . 4 d f 2 2 2 2 2 2 f d 4 . . 
-    . . 4 4 f 4 4 5 5 4 4 f 4 4 . . 
-    . . . . . f f f f f f . . . . . 
-    . . . . . f f . . f f . . . . . 
+    . . . f f f 2 2 2 2 2 f f . . . 
+    . . f f f 2 2 2 2 2 2 f f f . . 
+    . . f f 2 2 2 2 2 2 2 2 2 f . . 
+    . . f 2 2 7 7 7 7 7 7 2 2 f . . 
+    . . f 2 2 7 7 7 7 7 7 2 2 f . . 
+    . f f 2 f 4 f 7 7 f 4 f 2 f f . 
+    . f 2 2 7 1 f 7 7 f 1 7 2 2 f . 
+    . . f 2 7 7 7 7 7 7 7 7 2 f . . 
+    . . . f 7 7 7 f f 7 7 7 f . . . 
+    . . 5 5 4 5 5 5 5 5 5 4 5 5 . . 
+    . . 5 5 4 5 5 5 5 5 5 4 5 5 . . 
+    . . 5 5 4 c c e e c c 4 5 5 . . 
+    . . . . . c c c c c c . . . . . 
+    . . . . . c c . . c c . . . . . 
     `, SpriteKind.Player))
 mp.setPlayerSprite(mp.playerSelector(mp.PlayerNumber.Two), sprites.create(img`
-    . . . . . . 5 . 5 . . . . . . . 
-    . . . . . f 5 5 5 f f . . . . . 
-    . . . . f 1 5 2 5 1 6 f . . . . 
-    . . . f 1 6 6 6 6 6 1 6 f . . . 
-    . . . f 6 6 f f f f 6 1 f . . . 
-    . . . f 6 f f d d f f 6 f . . . 
-    . . f 6 f d f d d f d f 6 f . . 
-    . . f 6 f d 3 d d 3 d f 6 f . . 
-    . . f 6 6 f d d d d f 6 6 f . . 
-    . f 6 6 f 3 f f f f 3 f 6 6 f . 
-    . . f f 3 3 5 3 3 5 3 d f f . . 
-    . . . f d f 3 5 5 3 f f d f . . 
-    . . . f d f 3 3 3 3 3 f f . . . 
-    . . . f f 3 5 3 3 5 3 3 f . . . 
-    . . . . f f f f f f f f f . . . 
-    . . . . . . . . . f f . . . . . 
-    `, SpriteKind.Player))
-Jess = sprites.create(img`
-    . . . . . . . . . . . . . . . . 
-    . . . . . . 2 2 2 2 2 e . . . . 
-    . . . . . 2 2 2 2 d 2 2 e . . . 
-    . . . . e 2 2 2 2 2 2 2 e . . . 
-    . . . . e 2 2 2 2 2 2 2 e . . . 
-    . . . . e 2 2 2 2 2 e f f c c . 
-    . . . . e e 2 2 e f f f f b c . 
-    . . e e e f e e f f f f f d c . 
-    . e e 2 2 d f c b 4 4 c 1 b c . 
-    . e e 2 2 b c 4 1 1 4 c c . . . 
-    . b 1 1 b e c 4 4 4 4 c . . . . 
-    . . f f f d d 4 4 4 b c d . . . 
-    e e f f f d d c c c c d d . . . 
-    e e e f f f f c c c . . . . . . 
-    e e . . . . f f f . . . . . . . 
     . . . . . . f f f f . . . . . . 
-    `, SpriteKind.Player)
+    . . . . f f f e e f f f . . . . 
+    . . . f f f e e e e e f f . . . 
+    . . f f f e e e e e e f f f . . 
+    . . f f e e e e e e e e e f . . 
+    . . f e e 7 7 7 7 7 7 e e f . . 
+    . . f e e 7 7 7 7 7 7 e e f . . 
+    . f f e f d f 7 7 f d f e f f . 
+    . f e e 7 1 f 7 7 f 1 7 e e f . 
+    . . f e 7 7 7 7 7 7 7 7 e f . . 
+    . . . f 7 7 7 f f 7 7 7 f . . . 
+    . . 4 4 2 4 4 4 4 4 4 2 4 4 . . 
+    . . 4 4 2 4 4 4 4 4 4 2 4 4 . . 
+    . . 4 4 2 c c e e c c 2 4 4 . . 
+    . . . . . c c c c c c . . . . . 
+    . . . . . c c . . c c . . . . . 
+    `, SpriteKind.Player))
 Sam = mp.getPlayerSprite(mp.playerSelector(mp.PlayerNumber.One))
 Dean = mp.getPlayerSprite(mp.playerSelector(mp.PlayerNumber.Two))
 controller.player1.moveSprite(Sam, 100, 100)
 controller.player2.moveSprite(Dean, 100, 100)
 splitScreen.cameraFollowSprite(splitScreen.Camera.Camera1, mp.getPlayerSprite(mp.playerSelector(mp.PlayerNumber.One)))
 splitScreen.cameraFollowSprite(splitScreen.Camera.Camera2, mp.getPlayerSprite(mp.playerSelector(mp.PlayerNumber.Two)))
-tiles.placeOnRandomTile(Sam, assets.tile`myTile`)
+tiles.placeOnRandomTile(Sam, assets.tile`myTile27`)
 tiles.placeOnRandomTile(Dean, assets.tile`myTile3`)
-Level_One_Women_in_White()
+Call_Enemies()
