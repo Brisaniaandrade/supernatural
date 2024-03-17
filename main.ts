@@ -987,11 +987,16 @@ function Call_Enemies () {
         `
     ]
     if (Dean.tileKindAt(TileDirection.Right, sprites.dungeon.greenInnerNorthWest) || Sam.tileKindAt(TileDirection.Left, sprites.dungeon.greenInnerSouthEast)) {
-        let Location: tiles.Location[] = []
-        Ghost = sprites.create(GhostImage._pickRandom(), SpriteKind.Enemy)
-        tiles.placeOnTile(Ghost, Location.removeAt(randint(0, list.length)))
         if (Math.percentChance(75)) {
-        	
+            let Location: tiles.Location[] = []
+            Ghost = sprites.create(GhostImage._pickRandom(), SpriteKind.Enemy)
+            tiles.placeOnTile(Ghost, Location.removeAt(randint(0, list.length)))
+            Ghost.startEffect(effects.fire, 500)
+            Ghost.follow(Sam, 25)
+            Ghost.follow(Dean, 25)
+            if (Ghost.overlapsWith(Dean) || Ghost.overlapsWith(Sam)) {
+            	
+            }
         }
     }
 }
