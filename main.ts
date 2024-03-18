@@ -132,7 +132,7 @@ function Back_Story () {
     story.showPlayerChoices("yes", "no")
     if (story.checkLastAnswer("yes")) {
         story.startCutscene(function () {
-            music.play(music.randomizeSound(music.createSoundEffect(WaveShape.Square, 400, 600, 255, 0, 9999, SoundExpressionEffect.None, InterpolationCurve.Linear)), music.PlaybackMode.InBackground)
+            music.play(music.randomizeSound(music.createSoundEffect(WaveShape.Square, 1602, 4527, 175, 85, 9999, SoundExpressionEffect.Vibrato, InterpolationCurve.Logarithmic)), music.PlaybackMode.InBackground)
             // Show the outside house and slowly zoom in to the door
             scene.setBackgroundImage(img`
                 ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
@@ -748,13 +748,7 @@ function Back_Story () {
             story.showPlayerChoices("yes ", "no")
             if (story.checkLastAnswer("yes")) {
                 story.startCutscene(function () {
-                    game.splash("A WOMAN, MARY WINCHESTER, wearing a white nightgown, carries a SMALL CHILD, her son DEAN, into a dark room.")
-                    story.spriteSayText(Mary, "Come on, let's say good night to your brother.", 15)
-                    game.splash("MARY turns on the lights: it's the nursery of a BABY, SAM, who is lying in his crib and looking over at MARY and DEAN. MARY sets DEAN down. DEAN leans over the side of the crib and kisses SAM on the forehead.")
-                    story.spriteSayText(Dean, "'Night, Sam.", 15)
-                    game.splash("MARY leans over SAM as well.")
-                    story.spriteSayText(Mary, "Good night, love.", 15)
-                    game.splash("MARY leans over SAM as well.")
+                	
                 })
             } else {
                 scene.setBackgroundImage(img`
@@ -887,11 +881,17 @@ function Back_Story () {
         tiles.loadMap(tiles.createMap(tilemap`level1`))
     }
 }
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.greenInnerSouthEast, function (sprite, location) {
+    if (Math.percentChance(5)) {
+        let Location: tiles.Location[] = []
+        Ghost = sprites.create(GhostImage._pickRandom(), SpriteKind.Enemy)
+        tiles.placeOnTile(Ghost, Location.removeAt(randint(0, list.length)))
+        Ghost.follow(Sam, 50)
+        Ghost.follow(Dean, 50)
+    }
+})
 scene.onOverlapTile(SpriteKind.Enemy, sprites.dungeon.greenOuterNorth2, function (sprite, location) {
     sprites.destroyAllSpritesOfKind(SpriteKind.Enemy, effects.fire, 500)
-})
-scene.onOverlapTile(SpriteKind.Enemy, sprites.builtin.forestTiles0, function (sprite, location) {
-    tiles.loadMap(tiles.createMap(tilemap`level1`))
 })
 scene.onOverlapTile(SpriteKind.Enemy, sprites.dungeon.greenOuterEast1, function (sprite, location) {
     sprites.destroyAllSpritesOfKind(SpriteKind.Enemy, effects.fire, 500)
@@ -899,18 +899,6 @@ scene.onOverlapTile(SpriteKind.Enemy, sprites.dungeon.greenOuterEast1, function 
 scene.onOverlapTile(SpriteKind.Enemy, sprites.dungeon.greenOuterNorthEast, function (sprite, location) {
     sprites.destroyAllSpritesOfKind(SpriteKind.Enemy, effects.fire, 500)
 })
-function locationg (num: number) {
-    ghostlocation = 0
-    if (ghostlocation == num) {
-        if (Math.percentChance(99)) {
-            let Location: tiles.Location[] = []
-            Ghost = sprites.create(GhostImage._pickRandom(), SpriteKind.Enemy)
-            tiles.placeOnTile(Ghost, Location.removeAt(randint(0, list.length)))
-            Ghost.follow(Sam, 50)
-            Ghost.follow(Dean, 50)
-        }
-    }
-}
 scene.onOverlapTile(SpriteKind.Enemy, sprites.dungeon.greenOuterWest1, function (sprite, location) {
     sprites.destroyAllSpritesOfKind(SpriteKind.Enemy, effects.fire, 500)
 })
@@ -1035,14 +1023,14 @@ function Call_Enemies () {
         ........................
         `
     ]
-    if (Dean.tileKindAt(TileDirection.Bottom, sprites.dungeon.greenInnerSouthEast) || Sam.tileKindAt(TileDirection.Bottom, sprites.dungeon.greenInnerSouthEast)) {
+    if (Dean.tileKindAt(TileDirection.Bottom, sprites.dungeon.greenInnerNorthWest) || Sam.tileKindAt(TileDirection.Bottom, sprites.dungeon.greenInnerSouthEast)) {
         info.startCountdown(100)
         statusbar2 = statusbars.create(20, 4, StatusBarKind.Health)
         statusbar = statusbars.create(20, 4, StatusBarKind.Health)
         statusbar.attachToSprite(Dean)
         statusbar2.attachToSprite(Sam)
-        statusbar.value = 20000
-        statusbar2.value = 20000
+        statusbar.value = 10000
+        statusbar2.value = 10000
     }
 }
 scene.onOverlapTile(SpriteKind.Enemy, sprites.dungeon.greenOuterSouth0, function (sprite, location) {
@@ -1052,6 +1040,7 @@ scene.onOverlapTile(SpriteKind.Enemy, sprites.dungeon.greenOuterNorthWest, funct
     sprites.destroyAllSpritesOfKind(SpriteKind.Enemy, effects.fire, 500)
 })
 function Level_One_Women_in_White () {
+    let Jess: Sprite = null
     tiles.loadMap(tiles.createMap(tilemap`level7`))
     game.splash("The Women in White is like the English version of \"La Llorona\"")
     story.startCutscene(function () {
@@ -1855,21 +1844,16 @@ scene.onOverlapTile(SpriteKind.Enemy, sprites.dungeon.greenOuterWest0, function 
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     Ghost.startEffect(effects.fire, 500)
-    statusbar2.value += -1
     statusbar.value += -1
+    statusbar2.value += -1
 })
 let statusbar: StatusBarSprite = null
 let statusbar2: StatusBarSprite = null
 let list: number[] = []
 let GhostImage: Image[] = []
 let Ghost: Sprite = null
-let ghostlocation = 0
-let Mary: Sprite = null
-let Jess: Sprite = null
 let Dean: Sprite = null
 let Sam: Sprite = null
-story.printText("Remember that Sam is the youngest and Dean is the oldest, as the game goes and you go into levels there would be facts that you would need to remember as they woud be asked later on and would make you win or lose the game.", 78, 50, 15)
-tiles.loadMap(tiles.createMap(tilemap`level1`))
 mp.setPlayerSprite(mp.playerSelector(mp.PlayerNumber.One), sprites.create(img`
     . . . . . . f f f f . . . . . . 
     . . . . f f f 2 2 f f f . . . . 
@@ -1914,40 +1898,4 @@ splitScreen.cameraFollowSprite(splitScreen.Camera.Camera1, mp.getPlayerSprite(mp
 splitScreen.cameraFollowSprite(splitScreen.Camera.Camera2, mp.getPlayerSprite(mp.playerSelector(mp.PlayerNumber.Two)))
 tiles.placeOnRandomTile(Sam, assets.tile`myTile27`)
 tiles.placeOnRandomTile(Dean, assets.tile`myTile3`)
-Jess = sprites.create(img`
-    . . . . . . . . . . . . . . . . 
-    . . . . . . 2 2 2 2 2 e . . . . 
-    . . . . . 2 2 2 2 d 2 2 e . . . 
-    . . . . e 2 2 2 2 2 2 2 e . . . 
-    . . . . e 2 2 2 2 2 2 2 e . . . 
-    . . . . e 2 2 2 2 2 e f f c c . 
-    . . . . e e 2 2 e f f f f b c . 
-    . . e e e f e e f f f f f d c . 
-    . e e 2 2 d f c b 4 4 c 1 b c . 
-    . e e 2 2 b c 4 1 1 4 c c . . . 
-    . b 1 1 b e c 4 4 4 4 c . . . . 
-    . . f f f d d 4 4 4 b c d . . . 
-    e e f f f d d c c c c d d . . . 
-    e e e f f f f c c c . . . . . . 
-    e e . . . . f f f . . . . . . . 
-    . . . . . . f f f f . . . . . . 
-    `, SpriteKind.Player)
-Mary = sprites.create(img`
-    . . . . . . . . . . . . . . . . 
-    . . . . . . 2 2 2 2 2 e . . . . 
-    . . . . . 2 2 2 2 d 2 2 e . . . 
-    . . . . e 2 2 2 2 2 2 2 e . . . 
-    . . . . e 2 2 2 2 2 2 2 e . . . 
-    . . . . e 2 2 2 2 2 e f f c c . 
-    . . . . e e 2 2 e f f f f b c . 
-    . . e e e f e e f f f f f d c . 
-    . e e 2 2 d f c b 4 4 c 1 b c . 
-    . e e 2 2 b c 4 1 1 4 c c . . . 
-    . b 1 1 b e c 4 4 4 4 c . . . . 
-    . . f f f d d 4 4 4 b c d . . . 
-    e e f f f d d c c c c d d . . . 
-    e e e f f f f c c c . . . . . . 
-    e e . . . . f f f . . . . . . . 
-    . . . . . . f f f f . . . . . . 
-    `, SpriteKind.Player)
 Call_Enemies()
